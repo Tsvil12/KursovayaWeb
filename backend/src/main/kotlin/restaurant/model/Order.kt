@@ -19,6 +19,12 @@ class Order(
     @Column(nullable = false)
     var totalSum: Double = 0.0,
     
+    @Column(nullable = false)
+    var deliveryType: String = "САМОВЫВОЗ",  // САМОВЫВОЗ или ДОСТАВКА
+    
+    @Column
+    var address: String? = null,  // адрес доставки (если выбран тип ДОСТАВКА)
+    
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     var user: User? = null,

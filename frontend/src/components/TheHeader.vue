@@ -1,8 +1,8 @@
 <template>
   <div class="top-bar">
-    <div class="logo">
+    <router-link to="/" class="logo">
       РУССКИЙ ПАБ
-    </div>
+    </router-link>
     <div class="nav">
       <router-link to="/menu">МЕНЮ</router-link>
       <router-link to="/cart">КОРЗИНА</router-link>
@@ -40,6 +40,13 @@ const isAdmin = ref(false)
   color: #e6c88f;
   text-transform: uppercase;
   font-family: 'Impact', 'Arial Black', sans-serif;
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.logo:hover {
+  opacity: 0.9;
 }
 
 .nav a {
