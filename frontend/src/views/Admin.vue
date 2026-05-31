@@ -69,7 +69,7 @@
         <div class="featured-list">
           <div class="featured-item" v-for="dish in allDishes" :key="dish.id">
             <span>{{ dish.name }} — {{ dish.price }} ₽</span>
-            <button v-if="!dish.isFeatured" @click="setFeatured(dish.id, true)">★ Добавить</button>
+            <button v-if="!dish.isFeatured" @click="setFeatured(dish.id, true)">Добавить</button>
             <button v-else @click="setFeatured(dish.id, false)">★ Убрать</button>
           </div>
         </div>
@@ -104,7 +104,17 @@ const categories = ref([
   { id: 5, name: 'Холодные напитки' }
 ])
 
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('token')
+  return {
+    'Content-Type': 'application/json',
+    'Authorization': `Bearer ${token}`
+  }
+}
+
 const loadData = async () => {
+  const headers = getAuthHeaders()
+  
   const menuRes = await fetch('http://localhost:8080/api/public/menu')
   const menuData = await menuRes.json()
   if (menuData.status === 'ok') {
@@ -112,7 +122,7 @@ const loadData = async () => {
     allDishes.value = menuData.dishes
   }
   
-  const ordersRes = await fetch('http://localhost:8080/api/admin/orders')
+  const ordersRes = await fetch('http://localhost:8080/api/admin/orders', { headers })
   if (ordersRes.ok) {
     orders.value = await ordersRes.json()
   }
@@ -125,13 +135,8 @@ const loadData = async () => {
 }
 
 const addDish = async () => {
-  if (!newDish.value.name.trim()) {
-    alert('Введите название блюда')
-    return
-  }
-  
-  if (!newDish.value.price || newDish.value.price <= 0) {
-    alert('Введите корректную цену')
+  if (!newDish.value.name || !newDish.value.price) {
+    alert('Заполните название и цену')
     return
   }
   
@@ -146,30 +151,23 @@ const addDish = async () => {
     (dishData as any).category = { id: Number(newDish.value.categoryId) }
   }
   
-  console.log('Отправка:', dishData)
-  
   try {
     const response = await fetch('http://localhost:8080/api/admin/dishes', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
+      headers: getAuthHeaders(),
       body: JSON.stringify(dishData)
     })
     
-    const text = await response.text()
-    console.log('Ответ:', response.status, text)
-    
     if (response.ok) {
+      alert('Блюдо добавлено!')
       showAddForm.value = false
       newDish.value = { name: '', price: 0, description: '', categoryId: null }
       loadData()
-      alert('Блюдо добавлено!')
     } else {
-      alert(`Ошибка ${response.status}: ${text}`)
+      const text = await response.text()
+      alert(`Ошибка: ${text}`)
     }
-  } catch (error) {
-    console.error('Ошибка:', error)
+  } catch (e) {
     alert('Ошибка при добавлении')
   }
 }
@@ -177,7 +175,8 @@ const addDish = async () => {
 const deleteDish = async (id: number) => {
   if (confirm('Удалить блюдо?')) {
     await fetch(`http://localhost:8080/api/admin/dishes/${id}`, {
-      method: 'DELETE'
+      method: 'DELETE',
+      headers: getAuthHeaders()
     })
     loadData()
   }
@@ -185,14 +184,16 @@ const deleteDish = async (id: number) => {
 
 const updateStatus = async (orderId: number, status: string) => {
   await fetch(`http://localhost:8080/api/admin/orders/${orderId}/status?status=${status}`, {
-    method: 'PUT'
+    method: 'PUT',
+    headers: getAuthHeaders()
   })
   loadData()
 }
 
 const setFeatured = async (dishId: number, featured: boolean) => {
   await fetch(`http://localhost:8080/api/admin/dishes/${dishId}/featured?featured=${featured}`, {
-    method: 'PUT'
+    method: 'PUT',
+    headers: getAuthHeaders()
   })
   loadData()
 }
@@ -224,5 +225,5 @@ onMounted(() => {
 .featured-preview { background: #1f1b17; padding: 24px; border-radius: 24px; }
 .featured-dishes { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 16px; }
 .featured-dishes div { background: #c8974b20; padding: 8px 16px; border-radius: 30px; color: #c8974b; }
-.delete-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #c8974b; }
+.delete-btn { background: none; border: none; font-size: 1rem; cursor: pointer; color: #c8974b; }
 </style>

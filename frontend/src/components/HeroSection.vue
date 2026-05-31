@@ -1,17 +1,17 @@
 <template>
   <div class="hero">
     <div class="hero-content">
-        <h1>Паб Русский</h1>
-      <div class="tagline">Цвиль Павел и Гергет Игорь</div>
-      <div class="sub">Тц. Гринвич</div>
+      <h1><br>ПАБ РУССКИЙ</h1>
+      <div class="tagline">курсовая работа Цвиль Павла и Гергет Игоря</div>
+      <div class="sub">группа ФИТ-231</div>
     </div>
   </div>
 </template>
 
 <style scoped>
 .hero {
-  background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.75)), 
-              url('https://images.unsplash.com/photo-1552566626-52f8b828add9?q=80&w=2070&auto=format') center/cover no-repeat;
+  background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.7)), 
+              url('C:\Users\pavel\Desktop\KursovayaWeb\frontend\publick\Pab.png') center/cover no-repeat;
   min-height: 70vh;
   display: flex;
   align-items: center;

@@ -32,17 +32,6 @@
     </div>
 
     <div class="section">
-      <div class="section-title">НАСТОЙКИ И АВТОРСКИЕ КОКТЕЙЛИ</div>
-      <ul class="drinks-row">
-        <li>Клюква на коньяке</li>
-        <li>Рябиновая настойка</li>
-        <li>Хреновуха мятная</li>
-        <li>Медовуха с пряностями</li>
-        <li>Крафтовое пиво с таёжными травами</li>
-      </ul>
-    </div>
-
-    <div class="section">
       <div class="section-title">АТМОСФЕРА</div>
       <div class="atmosphere-grid">
         <div class="atmosphere-card">
