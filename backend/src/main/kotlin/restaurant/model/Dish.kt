@@ -4,21 +4,24 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "dishes")
-data class Dish(
+class Dish(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
+    var id: Long = 0,
     
     @Column(nullable = false)
-    val name: String = "",
+    var name: String = "",
     
     @Column(nullable = false)
-    val price: Double = 0.0,
+    var price: Double = 0.0,
     
     @Column(length = 500)
-    val description: String = "",
+    var description: String = "",
     
     @ManyToOne
     @JoinColumn(name = "category_id")
-    val category: Category? = null
+    var category: Category? = null,
+    
+    @Column(nullable = false)
+    var isFeatured: Boolean = false
 )

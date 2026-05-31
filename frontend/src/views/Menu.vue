@@ -86,7 +86,7 @@ const bestDishes = computed(() => dishes.value.slice(0, 3))
 
 const fetchMenu = async () => {
   try {
-    const response = await fetch('http://localhost:8080/api/public/menu')
+    const response = await fetch('http://localhost:8080/api/public/featured')
     const data = await response.json()
     if (data.status === 'ok') {
       dishes.value = data.dishes

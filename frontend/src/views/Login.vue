@@ -16,10 +16,10 @@
       <button class="login-btn" @click="login" :disabled="loading">
         {{ loading ? 'Вход...' : 'Войти' }}
       </button>
-
+      
       <div class="register-link">
-  Нет аккаунта? <router-link to="/register">Зарегистрироваться</router-link>
-</div>
+        Нет аккаунта? <router-link to="/register">Зарегистрироваться</router-link>
+      </div>
       
       <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
     </div>
@@ -53,13 +53,11 @@ const login = async () => {
     const data = await response.json()
     
     if (data.status === 'ok') {
-      // Сохраняем токен и данные пользователя
       localStorage.setItem('token', data.token)
       localStorage.setItem('role', data.role)
       localStorage.setItem('username', data.username)
       localStorage.setItem('userId', data.userId)
       
-      // Принудительно перезагружаем страницу, чтобы шапка обновилась
       window.location.href = '/'
     } else {
       errorMessage.value = data.message || 'Ошибка входа'
@@ -143,16 +141,6 @@ const login = async () => {
   cursor: not-allowed;
 }
 
-.error-message {
-  margin-top: 16px;
-  padding: 10px;
-  background: #ff6b6b20;
-  border: 1px solid #ff6b6b;
-  border-radius: 12px;
-  color: #ff6b6b;
-  text-align: center;
-}
-
 .register-link {
   text-align: center;
   margin-top: 20px;
@@ -162,5 +150,15 @@ const login = async () => {
 .register-link a {
   color: #c8974b;
   text-decoration: none;
+}
+
+.error-message {
+  margin-top: 16px;
+  padding: 10px;
+  background: #ff6b6b20;
+  border: 1px solid #ff6b6b;
+  border-radius: 12px;
+  color: #ff6b6b;
+  text-align: center;
 }
 </style>

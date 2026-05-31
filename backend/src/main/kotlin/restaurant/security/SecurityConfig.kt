@@ -6,15 +6,12 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.http.SessionCreationPolicy
 import org.springframework.security.web.SecurityFilterChain
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 
 @Configuration
 @EnableWebSecurity
-class SecurityConfig(
-    private val jwtFilter: JwtFilter
-) {
+class SecurityConfig {
 
     @Bean
     fun passwordEncoder(): PasswordEncoder = BCryptPasswordEncoder()
@@ -23,15 +20,12 @@ class SecurityConfig(
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
         http
             .csrf { it.disable() }
+            .cors { it.configure(http) }
             .authorizeHttpRequests { auth ->
                 auth
-                    .requestMatchers("/api/auth/**", "/api/public/**").permitAll()
-                    .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
-                    .requestMatchers("/api/client/**").hasAnyAuthority("CLIENT", "ADMIN")
-                    .anyRequest().authenticated()
+                    .anyRequest().permitAll()
             }
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
-            .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter::class.java)
         
         return http.build()
     }
