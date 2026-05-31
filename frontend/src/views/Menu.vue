@@ -30,7 +30,7 @@
         <div class="menu-item">Сбитень медовый</div>
         <div class="menu-item">Домашние настойки</div>
       </div>
-      <p class="quote">«Гастробар, где русская душа встречает гастрономический драйв»</p>
+      <p class="quote">Паб, где русская душа встречает всех</p>
     </div>
 
     <div class="section">
@@ -53,7 +53,7 @@
         <div class="atmosphere-card">
           <div class="atmosphere-icon">✦</div>
           <strong>Пятница Развратница</strong>
-          <p>Каждую пятницу живая музыка.</p>
+          <p>Каждую пятницу живая музыка  .</p>
         </div>
         <div class="atmosphere-card">
           <div class="atmosphere-icon">✦</div>

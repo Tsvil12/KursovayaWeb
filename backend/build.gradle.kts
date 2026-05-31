@@ -24,11 +24,12 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     
-    // Закомментировано для первого запуска (будет добавлено позже)
-    // implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    // implementation("org.springframework.boot:spring-boot-starter-security")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.postgresql:postgresql")
+    
+    // Остальные пока закомментированы (Redis, Security, JWT — добавим позже)
     // implementation("org.springframework.boot:spring-boot-starter-data-redis")
-    // implementation("org.postgresql:postgresql")
+    // implementation("org.springframework.boot:spring-boot-starter-security")
     // implementation("io.jsonwebtoken:jjwt-api:0.11.5")
     // runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
     // runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
