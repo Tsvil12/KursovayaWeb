@@ -1,25 +1,30 @@
 <template>
   <div class="section">
-    <h1 class="section-title">ВХОД</h1>
+    <h1 class="section-title">РЕГИСТРАЦИЯ</h1>
     
-    <div class="login-form">
+    <div class="register-form">
       <div class="form-group">
         <label>Логин</label>
-        <input type="text" v-model="username" placeholder="Введите логин" />
+        <input type="text" v-model="username" placeholder="Придумайте логин" />
       </div>
       
       <div class="form-group">
         <label>Пароль</label>
-        <input type="password" v-model="password" placeholder="Введите пароль" @keyup.enter="login" />
+        <input type="password" v-model="password" placeholder="Придумайте пароль" />
       </div>
       
-      <button class="login-btn" @click="login" :disabled="loading">
-        {{ loading ? 'Вход...' : 'Войти' }}
+      <div class="form-group">
+        <label>Повторите пароль</label>
+        <input type="password" v-model="confirmPassword" placeholder="Повторите пароль" />
+      </div>
+      
+      <button class="register-btn" @click="register" :disabled="loading">
+        {{ loading ? 'Регистрация...' : 'Зарегистрироваться' }}
       </button>
-
-      <div class="register-link">
-  Нет аккаунта? <router-link to="/register">Зарегистрироваться</router-link>
-</div>
+      
+      <div class="login-link">
+        Уже есть аккаунт? <router-link to="/login">Войти</router-link>
+      </div>
       
       <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
     </div>
@@ -28,17 +33,26 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
 
-const router = useRouter()
 const username = ref('')
 const password = ref('')
+const confirmPassword = ref('')
 const loading = ref(false)
 const errorMessage = ref('')
 
-const login = async () => {
+const register = async () => {
   if (!username.value || !password.value) {
-    errorMessage.value = 'Введите логин и пароль'
+    errorMessage.value = 'Заполните все поля'
+    return
+  }
+  
+  if (password.value !== confirmPassword.value) {
+    errorMessage.value = 'Пароли не совпадают'
+    return
+  }
+  
+  if (password.value.length < 4) {
+    errorMessage.value = 'Пароль должен быть не менее 4 символов'
     return
   }
   
@@ -46,23 +60,21 @@ const login = async () => {
   errorMessage.value = ''
   
   try {
-    const response = await fetch(`http://localhost:8080/api/auth/login?username=${username.value}&password=${password.value}`, {
+    const response = await fetch(`http://localhost:8080/api/auth/register?username=${username.value}&password=${password.value}`, {
       method: 'POST'
     })
     
     const data = await response.json()
     
     if (data.status === 'ok') {
-      // Сохраняем токен и данные пользователя
       localStorage.setItem('token', data.token)
       localStorage.setItem('role', data.role)
       localStorage.setItem('username', data.username)
       localStorage.setItem('userId', data.userId)
       
-      // Принудительно перезагружаем страницу, чтобы шапка обновилась
       window.location.href = '/'
     } else {
-      errorMessage.value = data.message || 'Ошибка входа'
+      errorMessage.value = data.message || 'Ошибка регистрации'
     }
   } catch (error) {
     console.error('Ошибка:', error)
@@ -88,7 +100,7 @@ const login = async () => {
   color: #ebd6af;
 }
 
-.login-form {
+.register-form {
   background: #1f1b17;
   padding: 40px;
   border-radius: 24px;
@@ -120,7 +132,7 @@ const login = async () => {
   border-color: #c8974b;
 }
 
-.login-btn {
+.register-btn {
   width: 100%;
   background: #c8974b;
   border: none;
@@ -133,14 +145,25 @@ const login = async () => {
   transition: 0.2s;
 }
 
-.login-btn:hover:not(:disabled) {
+.register-btn:hover:not(:disabled) {
   background: #dbb05c;
   transform: scale(1.02);
 }
 
-.login-btn:disabled {
+.register-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 20px;
+  color: #cfc3aa;
+}
+
+.login-link a {
+  color: #c8974b;
+  text-decoration: none;
 }
 
 .error-message {
@@ -151,16 +174,5 @@ const login = async () => {
   border-radius: 12px;
   color: #ff6b6b;
   text-align: center;
-}
-
-.register-link {
-  text-align: center;
-  margin-top: 20px;
-  color: #cfc3aa;
-}
-
-.register-link a {
-  color: #c8974b;
-  text-decoration: none;
 }
 </style>

@@ -4,6 +4,7 @@ import AllMenuPage from '../views/AllMenu.vue'
 import CartPage from '../views/Cart.vue'
 import LoginPage from '../views/Login.vue'
 import AdminPage from '../views/Admin.vue'
+import RegisterPage from '../views/Register.vue'
 
 const routes = [
   { path: '/', name: 'Home', component: MenuPage },
@@ -11,6 +12,7 @@ const routes = [
   { path: '/cart', name: 'Cart', component: CartPage },
   { path: '/login', name: 'Login', component: LoginPage },
   { path: '/admin', name: 'Admin', component: AdminPage },
+  { path: '/register', name: 'Register', component: RegisterPage },
 ]
 
 const router = createRouter({

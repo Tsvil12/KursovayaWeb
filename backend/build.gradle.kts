@@ -20,20 +20,16 @@ repositories {
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
-    
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.postgresql:postgresql")
-    implementation("org.springframework.security:spring-security-crypto")
-    
-    // Остальные пока закомментированы (Redis, Security, JWT — добавим позже)
-    // implementation("org.springframework.boot:spring-boot-starter-data-redis")
-    // implementation("org.springframework.boot:spring-boot-starter-security")
-    // implementation("io.jsonwebtoken:jjwt-api:0.11.5")
-    // runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
-    // runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
+    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
+    implementation("jakarta.xml.bind:jakarta.xml.bind-api:4.0.0")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
 tasks.withType<KotlinCompile> {

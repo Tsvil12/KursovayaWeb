@@ -1,53 +1,101 @@
-@PostMapping("/orders")
-@Transactional
-fun createOrder(
-    @RequestParam userId: Long,
-    @RequestParam deliveryType: String,  // САМОВЫВОЗ или ДОСТАВКА
-    @RequestParam(required = false) address: String?,
-    @RequestBody items: List<OrderItemRequest>
-): Map<String, Any> {
-    val user = userRepository.findById(userId).orElse(null)
-        ?: return mapOf("status" to "error", "message" to "Пользователь не найден")
-    
-    if (deliveryType == "ДОСТАВКА" && address.isNullOrBlank()) {
-        return mapOf("status" to "error", "message" to "Для доставки нужен адрес")
-    }
+package restaurant.controller
 
-    var totalSum = 0.0
-    val orderItems = mutableListOf<OrderItem>()
+import org.springframework.web.bind.annotation.*
+import restaurant.repository.DishRepository
+import restaurant.repository.OrderRepository
+import restaurant.model.Order
+import restaurant.model.OrderItem
+import restaurant.repository.UserRepository
+import java.time.LocalDateTime
+import jakarta.transaction.Transactional
 
-    for (item in items) {
-        val dish = dishRepository.findById(item.dishId).orElse(null)
-            ?: return mapOf("status" to "error", "message" to "Блюдо не найдено: ${item.dishId}")
+@RestController
+@RequestMapping("/api/client")
+@CrossOrigin(origins = ["http://localhost:5173"])
+class ClientController(
+    private val orderRepository: OrderRepository,
+    private val dishRepository: DishRepository,
+    private val userRepository: UserRepository
+) {
 
-        totalSum += dish.price * item.quantity
+    @PostMapping("/orders")
+    @Transactional
+    fun createOrder(
+        @RequestParam userId: Long,
+        @RequestParam deliveryType: String,
+        @RequestParam(required = false) address: String?,
+        @RequestBody items: List<OrderItemRequest>
+    ): Map<String, Any> {
+        val user = userRepository.findById(userId).orElse(null)
+            ?: return mapOf("status" to "error", "message" to "Пользователь не найден")
         
-        val orderItem = OrderItem()
-        orderItem.dish = dish
-        orderItem.quantity = item.quantity
-        orderItem.priceAtOrder = dish.price
+        if (deliveryType == "ДОСТАВКА" && address.isNullOrBlank()) {
+            return mapOf("status" to "error", "message" to "Для доставки нужен адрес")
+        }
+
+        var totalSum = 0.0
+        val orderItems = mutableListOf<OrderItem>()
+
+        for (item in items) {
+            val dish = dishRepository.findById(item.dishId).orElse(null)
+                ?: return mapOf("status" to "error", "message" to "Блюдо не найдено: ${item.dishId}")
+
+            totalSum += dish.price * item.quantity
+            
+            val orderItem = OrderItem()
+            orderItem.dish = dish
+            orderItem.quantity = item.quantity
+            orderItem.priceAtOrder = dish.price
+            
+            orderItems.add(orderItem)
+        }
+
+        val order = Order()
+        order.user = user
+        order.orderDate = LocalDateTime.now()
+        order.status = "PENDING"
+        order.totalSum = totalSum
+        order.deliveryType = deliveryType
+        order.address = if (deliveryType == "ДОСТАВКА") address else null
+        order.items = orderItems.toMutableList()
+
+        for (item in orderItems) {
+            item.order = order
+        }
+
+        val savedOrder = orderRepository.save(order)
         
-        orderItems.add(orderItem)
+        return mapOf(
+            "status" to "ok", 
+            "orderId" to savedOrder.id, 
+            "totalSum" to totalSum
+        )
     }
 
-    val order = Order()
-    order.user = user
-    order.orderDate = LocalDateTime.now()
-    order.status = "PENDING"
-    order.totalSum = totalSum
-    order.deliveryType = deliveryType
-    order.address = if (deliveryType == "ДОСТАВКА") address else null
-    order.items = orderItems.toMutableList()
-
-    for (item in orderItems) {
-        item.order = order
+    @GetMapping("/orders")
+    fun getOrders(@RequestParam userId: Long): List<Map<String, Any?>> {
+        val orders = orderRepository.findByUserId(userId)
+        return orders.map { order ->
+            mapOf(
+                "id" to order.id,
+                "date" to order.orderDate.toString(),
+                "status" to order.status,
+                "totalSum" to order.totalSum,
+                "deliveryType" to order.deliveryType,
+                "address" to order.address,
+                "items" to order.items.map { item ->
+                    mapOf(
+                        "dishName" to item.dish?.name,
+                        "quantity" to item.quantity,
+                        "price" to item.priceAtOrder
+                    )
+                }
+            )
+        }
     }
-
-    val savedOrder = orderRepository.save(order)
-    
-    return mapOf(
-        "status" to "ok", 
-        "orderId" to savedOrder.id, 
-        "totalSum" to totalSum
-    )
 }
+
+data class OrderItemRequest(
+    val dishId: Long,
+    val quantity: Int
+)
