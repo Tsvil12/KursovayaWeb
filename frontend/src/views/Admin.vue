@@ -37,7 +37,7 @@
               <span v-if="dish.category" class="category">({{ dish.category }})</span>
             </div>
             <div class="dish-actions">
-              <button @click="deleteDish(dish.id)" class="delete-btn">🗑</button>
+              <button @click="deleteDish(dish.id)" class="delete-btn">Удалить блюдо</button>
             </div>
           </div>
         </div>
@@ -146,7 +146,7 @@ const addDish = async () => {
     (dishData as any).category = { id: Number(newDish.value.categoryId) }
   }
   
-  console.log('📤 Отправка:', dishData)
+  console.log('Отправка:', dishData)
   
   try {
     const response = await fetch('http://localhost:8080/api/admin/dishes', {
@@ -158,13 +158,13 @@ const addDish = async () => {
     })
     
     const text = await response.text()
-    console.log('📥 Ответ:', response.status, text)
+    console.log('Ответ:', response.status, text)
     
     if (response.ok) {
       showAddForm.value = false
       newDish.value = { name: '', price: 0, description: '', categoryId: null }
       loadData()
-      alert('✅ Блюдо добавлено!')
+      alert('Блюдо добавлено!')
     } else {
       alert(`Ошибка ${response.status}: ${text}`)
     }
@@ -224,5 +224,5 @@ onMounted(() => {
 .featured-preview { background: #1f1b17; padding: 24px; border-radius: 24px; }
 .featured-dishes { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 16px; }
 .featured-dishes div { background: #c8974b20; padding: 8px 16px; border-radius: 30px; color: #c8974b; }
-.delete-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; }
+.delete-btn { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: #c8974b; }
 </style>

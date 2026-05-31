@@ -24,7 +24,7 @@
             <div class="item-total">
               {{ item.price * item.quantity }} ₽
             </div>
-            <button @click="removeItem(item.id)" class="remove-btn">🗑</button>
+            <button @click="removeItem(item.id)" class="remove-btn">Удалить блюдо</button>
           </div>
         </div>
       </div>
