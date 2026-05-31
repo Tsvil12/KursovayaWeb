@@ -4,7 +4,7 @@
       РУССКИЙ ПАБ
     </div>
     <div class="nav">
-      <router-link to="/">МЕНЮ</router-link>
+      <router-link to="/menu">МЕНЮ</router-link>
       <router-link to="/cart">КОРЗИНА</router-link>
       <router-link to="/login">ВХОД</router-link>
       <router-link to="/admin" v-if="isAdmin">АДМИН</router-link>

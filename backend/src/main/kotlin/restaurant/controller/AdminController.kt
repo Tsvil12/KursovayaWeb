@@ -6,6 +6,7 @@ import restaurant.repository.DishRepository
 
 @RestController
 @RequestMapping("/api/admin")
+@CrossOrigin(origins = ["http://localhost:5173"])  // ← добавить эту строку
 class AdminController(
     private val dishRepository: DishRepository
 ) {

@@ -11,6 +11,7 @@ import jakarta.transaction.Transactional
 
 @RestController
 @RequestMapping("/api/client")
+@CrossOrigin(origins = ["http://localhost:5173"])
 class ClientController(
     private val orderRepository: OrderRepository,
     private val dishRepository: DishRepository,
