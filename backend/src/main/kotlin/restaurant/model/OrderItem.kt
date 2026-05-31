@@ -4,22 +4,24 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "order_items")
-data class OrderItem(
+class OrderItem(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long = 0,
+    var id: Long = 0,
     
     @ManyToOne
     @JoinColumn(name = "order_id", nullable = false)
-    val order: Order,
+    var order: Order? = null,
     
     @ManyToOne
     @JoinColumn(name = "dish_id", nullable = false)
-    val dish: Dish,
+    var dish: Dish? = null,
     
     @Column(nullable = false)
-    val quantity: Int = 1,
+    var quantity: Int = 1,
     
     @Column(nullable = false)
-    val priceAtOrder: Double = 0.0  // цена на момент заказа
-)
+    var priceAtOrder: Double = 0.0
+) {
+    constructor() : this(0)
+}
