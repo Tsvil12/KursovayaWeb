@@ -26,6 +26,7 @@ dependencies {
     
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.postgresql:postgresql")
+    implementation("org.springframework.security:spring-security-crypto")
     
     // Остальные пока закомментированы (Redis, Security, JWT — добавим позже)
     // implementation("org.springframework.boot:spring-boot-starter-data-redis")
