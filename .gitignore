@@ -1,0 +1,23 @@
+# Gradle
+.gradle/
+build/
+bin/
+*.class
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backend
+backend/bin/
+backend/build/
+backend/.gradle/
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
