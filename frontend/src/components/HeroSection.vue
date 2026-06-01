@@ -2,8 +2,8 @@
   <div class="hero">
     <div class="hero-content">
       <h1><br>ПАБ РУССКИЙ</h1>
-      <div class="tagline">курсовая работа Цвиль Павла и Гергет Игоря</div>
-      <div class="sub">группа ФИТ-231</div>
+      <div class="tagline">Паб для ценителей русского духа</div>
+      <div class="sub">Мы находимся по адресу г. Кемерово, тц Гринвич</div>
     </div>
   </div>
 </template>

@@ -128,12 +128,16 @@ const checkout = async () => {
     return
   }
   
+  const userId = localStorage.getItem('userId')
+  if (!userId) {
+    showNotification('Для оформления заказа войдите в систему')
+    return
+  }
+  
   if (deliveryType.value === 'ДОСТАВКА' && !deliveryAddress.value.trim()) {
     showNotification('Введите адрес доставки')
     return
   }
-  
-  const userId = 2  // временно, потом заменим на реальный после авторизации
   
   const orderItems = cartItems.value.map(item => ({
     dishId: item.id,
@@ -149,7 +153,8 @@ const checkout = async () => {
     const response = await fetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
       },
       body: JSON.stringify(orderItems)
     })
@@ -302,7 +307,7 @@ onMounted(() => {
 .remove-btn {
   background: none;
   border: none;
-  font-size: 1.2rem;
+  font-size: 0.9rem;
   cursor: pointer;
   color: #9e8e72;
   transition: 0.2s;
@@ -310,7 +315,7 @@ onMounted(() => {
 
 .remove-btn:hover {
   color: #ff6b6b;
-  transform: scale(1.1);
+  transform: scale(1.02);
 }
 
 .cart-summary {
